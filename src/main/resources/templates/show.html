@@ -56,6 +56,20 @@
             margin-right: 5px;
         }
 
+        .button {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .button-each {
+            padding: 5px 10px;
+            background-color: #708090;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 2px;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -69,7 +83,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="user : ${user1}">
+    <tr th:each="user : ${user_1}">
         <td th:text="${user.getId()}">VALUE</td>
         <td th:text="${user.getName()}">VALUE</td>
         <td th:text="${user.getLastname()}">VALUE</td>
@@ -77,5 +91,14 @@
     </tr>
     </tbody>
 </table>
+
+<div class="button">
+    <form th:method="DELETE" th:action="@{/admin/{id}(id = ${user_1.getId()})}">
+        <input type="submit" value="Удалить" class="button-each"/>
+    </form>
+
+    <a th:href="@{/admin/{id}/edit (id = ${user_1.getId()})}" th:text="Изменить" class="button-each">Изменить</a>
+
+</div>
 </body>
 </html>
