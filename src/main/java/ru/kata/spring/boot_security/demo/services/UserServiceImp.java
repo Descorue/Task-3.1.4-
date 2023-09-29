@@ -1,81 +1,71 @@
 package ru.kata.spring.boot_security.demo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.entities.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
-@Transactional
-public class UserServiceImp implements UserService {
+public class UserServiceImp implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
 
-    @Autowired
-    public UserServiceImp(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImp(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
-        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        return user;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<User> getUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public User showUser(Long id) {
-        Optional<User> userInDb = userRepository.findById(id);
-        return userInDb.orElse(new User());
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-        if (userRepository.findById(id).isPresent()) {
-            userRepository.deleteById(id);
-        }
-    }
-
-
-    @Override
-    public void saveUser(User user) {
-        User userFromDB = userRepository.findByUsername(user.getUsername());
-
-        if (userFromDB == null || user.getRoles() == null) {
-            user.setRoles(Set.of(roleRepository.getById(2L)));
-        }
-        if (user.getPassword().equals("") && userFromDB != null) {
-            user.setPassword(userFromDB.getPassword());
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
+    @Transactional
+    public void save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
+    @Override
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
 
+    @Override
+    public User showUserById(Long id) {
+        return userRepository.getOne(id);
+    }
+
+    @Override
+    @Transactional
+    public void update(Long id, User user) {
+        user.setId(id);
+        userRepository.save(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByUsername(email);
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String email) {
+        User user = userRepository.findByUsername(email);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User '%s' not found", email));
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
+    }
 }
