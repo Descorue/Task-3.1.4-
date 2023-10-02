@@ -24,7 +24,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -56,16 +55,16 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByUsername(email);
+        return userRepository.findByEmail(email);
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) {
-        User user = userRepository.findByUsername(email);
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", email));
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getAuthorities());
     }
 }

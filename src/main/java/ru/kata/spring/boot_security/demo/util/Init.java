@@ -22,6 +22,7 @@ public class Init {
         this.userService = userService;
         this.roleService = roleService;
     }
+
     @PostConstruct
     public void initializedDataBase() {
         roleService.save(new Role("ROLE_ADMIN"));
@@ -33,8 +34,8 @@ public class Init {
         userRole.add(roleService.showUserById(2L));
         allRoles.add(roleService.showUserById(1L));
         allRoles.add(roleService.showUserById(2L));
-        userService.save(new User("Mike", "Pyke", "pyke@mail.ru", "Pyke", adminRole));
-        userService.save(new User("Piter", "Lombok", "lombok@mail.ru","Lombok", userRole));
-        userService.save(new User("Kate", "Java", "java@gmail.com","Java", allRoles));
+        userService.save(new User("Mike", "Pyke", 24, "pyke@mail.ru", "Pyke", adminRole));
+        userService.save(new User("Piter", "Lombok", 34, "lombok@mail.ru", "Lombok", userRole));
+        userService.save(new User("Kate", "Java", 44, "java@gmail.com", "Java", allRoles));
     }
 }
