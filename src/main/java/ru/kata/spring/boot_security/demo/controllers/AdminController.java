@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import java.security.Principal;
-import java.util.HashSet;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -56,16 +53,6 @@ public class AdminController {
 
     @PatchMapping("/edit/{id}")
     public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") User user, @RequestParam("roles") Long[] rolesId) {
-        Set<Role> roles = new HashSet<>();
-        for (Long roleId : rolesId) {
-            roles.add(roleService.showUserById(roleId));
-        }
-        user.setRoles(roles);
-        if (user.getPassword().length() < 3) {
-            user.setPassword(userService.showUserById(id).getPassword());
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
         userService.update(id, user);
         return "redirect:/admin";
     }
