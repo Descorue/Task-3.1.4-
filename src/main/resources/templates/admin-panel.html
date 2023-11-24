@@ -69,8 +69,6 @@
                                     <tr>
                                         <th scope="col">ID</th>
                                         <th scope="col">First Name</th>
-                                        <th scope="col">Last Name</th>
-                                        <th scope="col">Age</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Role</th>
                                         <th scope="col">Edit</th>
@@ -81,8 +79,6 @@
                                     <tr th:each="user : ${users}">
                                         <td th:text="${user.getId}"></td>
                                         <td th:text="${user.getFirstName()}"></td>
-                                        <td th:text="${user.getLastName()}"></td>
-                                        <td th:text="${user.getAge()}"></td>
                                         <td th:text="${user.getEmail()}"></td>
                                         <td th:text="${user.getRoles()}"></td>
                                         <td> <!-- Кнопка Edit. Открывает модальное окно modalEdit{id}  -->
@@ -124,17 +120,6 @@
                                                                            class="form-control"
                                                                            id="userFirstNameEdit"
                                                                            th:value="${user.getFirstName()}">
-                                                                    <br>
-                                                                    <label for="userLastNameEdit">Last Name</label>
-                                                                    <input th:name="lastName" th:type="text"
-                                                                           class="form-control"
-                                                                           id="userLastNameEdit"
-                                                                           th:value="${user.getLastName()}">
-                                                                    <br>
-                                                                    <label for="userAgeEdit">Age</label>
-                                                                    <input th:name="age" th:type="number"
-                                                                           class="form-control"
-                                                                           id="userAgeEdit" th:value="${user.getAge()}">
                                                                     <br>
                                                                     <label for="userEmailEdit">Email</label>
                                                                     <input th:name="email" th:type="text"
@@ -204,18 +189,6 @@
                                                                            id="userFirstNameDelete"
                                                                            th:value="${user.getFirstName()}" disabled>
                                                                     <br>
-                                                                    <label for="userLastNameDelete">Last Name</label>
-                                                                    <input th:name="lastName" th:type="text"
-                                                                           class="form-control"
-                                                                           id="userLastNameDelete"
-                                                                           th:value="${user.getLastName()}" disabled>
-                                                                    <br>
-                                                                    <label for="userAgeDelete">Age</label>
-                                                                    <input th:name="age" th:type="number"
-                                                                           class="form-control"
-                                                                           id="userAgeDelete"
-                                                                           th:value="${user.getAge()}" disabled>
-                                                                    <br>
                                                                     <label for="userEmailDelete">Email</label>
                                                                     <input th:name="email" th:type="text"
                                                                            class="form-control"
@@ -273,17 +246,7 @@
                                                        id="userFirstNameNew"
                                                        placeholder="First name">
                                                 <br>
-                                                <label for="userLastNameNew">Last Name</label>
-                                                <input th:name="lastName" th:type="text"
-                                                       class="form-control"
-                                                       id="userLastNameNew"
-                                                       placeholder="Last name">
-                                                <br>
-                                                <label for="userAgeNew">Age</label>
-                                                <input th:name="age" th:type="number"
-                                                       class="form-control"
-                                                       id="userAgeNew" placeholder="Age">
-                                                <br>
+
                                                 <label for="userEmailNew">Email</label>
                                                 <input th:name="email" th:type="text"
                                                        class="form-control"
@@ -334,8 +297,7 @@
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">First Name</th>
-                                <th scope="col">Last Name</th>
-                                <th scope="col">Age</th>
+
                                 <th scope="col">Email</th>
                                 <th scope="col">Role</th>
                             </tr>
@@ -344,8 +306,6 @@
                             <tr>
                                 <td th:text="${user.getId}"></td>
                                 <td th:text="${user.getFirstName()}"></td>
-                                <td th:text="${user.getLastName()}"></td>
-                                <td th:text="${user.getAge()}"></td>
                                 <td th:text="${user.getEmail()}"></td>
                                 <td th:text="${user.getRoles()}"></td>
                             </tr>
